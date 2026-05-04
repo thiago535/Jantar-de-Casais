@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jantar de Casais</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #2b0a1f, #5c0f2e, #8b1e3f);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .box {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 28px 28px;
+      border-radius: 24px;
+      width: min(100%, 520px);
+      max-width: 100%;
+      box-shadow: 0 0 36px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      margin: 0 10px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 5vw, 40px);
+      color: #ff9bb3;
+      text-align: center;
+    }
+
+    .sub {
+      text-align: center;
+      font-size: clamp(13px, 2vw, 16px);
+      margin-bottom: 18px;
+      opacity: 0.9;
+    }
+
+    .info {
+      font-size: clamp(15px, 2vw, 17px);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .info strong {
+      color: #fff;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      margin-top: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.14);
+      color: white;
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      color: #ddd;
+      opacity: 0.9;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px 18px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+    }
+
+    .ok {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    #vagas {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    #msg {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 15px;
+      min-height: 24px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .box {
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 18px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .sub {
+        font-size: 15px;
+      }
+
+      .info {
+        font-size: 16px;
+      }
+
+      input,
+      button {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+
+    <h1>💖 Jantar de Casais</h1>
+    <div class="sub">IEQ Mendonça</div>
+
+    <div class="info">📅 <strong>13/06/2026</strong></div>
+    <div class="info">⏰ <strong>19:30</strong></div>
+    <div class="info">💍 <strong>Casamento: um laço que não se desfaz</strong></div>
+    <div class="info">📍 <strong>CCR de Mendonça</strong></div>
+    <div class="info">💰 <strong>R$150,00 o casal</strong></div>
+    <div class="info">👶 <strong>Crianças (5 a 10 anos): R$40,00</strong></div>
+
+    <input id="nome" placeholder="Nome do casal">
+    <input id="tel" placeholder="Telefone">
+    <input id="filhos" placeholder="Quantidade de filhos">
+    <input id="idades" placeholder="Idade dos filhos">
+
+    <button type="button" class="ok" onclick="enviar()">Confirmar</button>
+    <p id="vagas" style="text-align:center; margin-top:10px;">
+      Carregando vagas...
+    </p>
+    <p id="msg"></p>
+
+  </div>
+
+  <script>
+
+    async function atualizarVagas() {
+      const supabase = getSupabaseClient();
+      if (!supabase) return;
+
+      const { count, error } = await supabase
+        .from("inscricoes")
+        .select("*", { count: "exact", head: true });
+
+      if (error) {
+        document.getElementById("vagas").innerText = "Erro ao carregar vagas";
+        return;
+      }
+
+      let total = 60;
+      let restantes = total - count;
+
+      if (restantes <= 0) {
+        document.getElementById("vagas").innerText = "❌ Vagas esgotadas";
+      } else if (restantes <= 10) {
+        document.getElementById("vagas").innerText = `🔥 Últimas vagas! Restam ${restantes}`;
+      } else {
+        document.getElementById("vagas").innerText = `💖 Restam ${restantes} vagas`;
+      }
+    }
+    const nomeInput = document.getElementById("nome");
+    const telInput = document.getElementById("tel");
+    const filhosInput = document.getElementById("filhos");
+    const idadesInput = document.getElementById("idades");
+    const msg = document.getElementById("msg");
+
+    function getSupabaseClient() {
+      if (!window.supabase) {
+        msg.innerText = "Supabase não carregado";
+        return null;
+      }
+
+      return window.supabase.createClient(
+        "https://qfoiyphfyjjzxgesynmt.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmb2l5cGhmeWpqenhnZXN5bm10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4NDY1ODEsImV4cCI6MjA5MzQyMjU4MX0.--ZELH0chJiXeC6mHRxwhtIvkPm8cxNQZEnk6IRzjSs"
+      );
+    }
+
+    window.enviar = async function () {
+
+      const supabase = getSupabaseClient();
+      if (!supabase) return;
+
+      let nome = nomeInput.value;
+      let tel = telInput.value;
+      let filhos = filhosInput.value;
+      let idades = idadesInput.value;
+
+      const { count } = await supabase
+        .from("inscricoes")
+        .select("*", { count: "exact", head: true });
+
+      if (count >= 60) {
+        msg.innerText = "❌ Vagas esgotadas";
+        return;
+      }
+
+      if (!nome || !tel) {
+        alert("Preencha tudo");
+        return;
+      }
+
+      const { error } = await supabase
+        .from("inscricoes")
+        .insert([{ nome, telefone: tel, filhos, idades }]);
+
+      if (error) {
+        msg.innerText = "Erro: " + error.message;
+        console.log(error);
+      } else {
+        msg.innerText = "Inscrição salva!"; await atualizarVagas();
+        nomeInput.value = "";
+        telInput.value = "";
+        filhosInput.value = "";
+        idadesInput.value = "";
+      }
+    };
+
+    atualizarVagas();
+  </script>
+
+</body>
+
+</html>
