@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
   <title>Jantar de Casais</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
@@ -11,7 +12,7 @@
   <style>
     body {
       margin: 0;
-      padding: 16px;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #2b0a1f, #5c0f2e, #8b1e3f);
       min-height: 100vh;
@@ -19,41 +20,233 @@
       justify-content: center;
       align-items: center;
       color: white;
+      overflow-x: hidden;
     }
 
+    /* === DESKTOP: layout de duas colunas === */
     .box {
-      background: rgba(0, 0, 0, 0.75);
-      padding: 28px 28px;
-      border-radius: 24px;
-      width: min(100%, 520px);
-      max-width: 100%;
-      box-shadow: 0 0 36px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(10px);
-      margin: 0 10px;
+      background: rgba(0, 0, 0, 0.82);
+      padding: 40px 44px;
+      border-radius: 28px;
+      width: min(92vw, 860px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 24px;
+      box-sizing: border-box;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(30px, 5vw, 40px);
+      margin: 0 0 8px;
+      font-size: clamp(32px, 5vw, 52px);
       color: #ff9bb3;
       text-align: center;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
 
     .sub {
       text-align: center;
-      font-size: clamp(13px, 2vw, 16px);
-      margin-bottom: 18px;
+      font-size: clamp(14px, 2vw, 18px);
+      margin-bottom: 6px;
       opacity: 0.9;
+      font-weight: 500;
+    }
+
+    /* Grid de duas colunas no desktop */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 28px;
+    }
+
+    .inner-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 24px 22px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .info-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f8f0ff;
+      margin-bottom: 16px;
+      text-align: center;
     }
 
     .info {
-      font-size: clamp(15px, 2vw, 17px);
+      font-size: 16px;
       margin-bottom: 10px;
-      line-height: 1.5;
+      line-height: 1.6;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .info:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
     }
 
     .info strong {
       color: #fff;
+      font-weight: 600;
+    }
+
+    /* Pagamento */
+    .pagamento-select {
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pagamento-select label {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ff9bb3;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .pagamento-dropdown {
+      position: relative;
+      width: 100%;
+    }
+
+    .pagamento-dropdown select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 16px;
+      padding-right: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .pagamento-dropdown select:focus {
+      outline: none;
+      border-color: #ff4d6d;
+      background-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+    }
+
+    .pagamento-dropdown select:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .pagamento-dropdown option {
+      background: #2a2a2a;
+      color: white;
+      padding: 8px;
+    }
+
+    .copy-btn {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      width: 100%;
+      margin-top: 0;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .pix-section {
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    .pix-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .pix-email {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #ff9bb3;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .pagamento-select {
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pagamento-select label {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ff9bb3;
+      margin-bottom: 10px;
+    }
+
+    .pagamento-radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pagamento-radio {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .pagamento-radio:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .pagamento-radio input[type="radio"] {
+      margin-right: 10px;
+      accent-color: #ff4d6d;
+    }
+
+    .pagamento-radio span {
+      font-size: 14px;
+      color: white;
+    }
+
+    /* Coluna do formulário */
+    .form-col {
+      display: flex;
+      flex-direction: column;
     }
 
     input {
@@ -62,10 +255,18 @@
       margin-top: 12px;
       border-radius: 14px;
       border: none;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.14);
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.12);
       color: white;
       box-sizing: border-box;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
     }
 
     input::placeholder {
@@ -73,67 +274,124 @@
       opacity: 0.9;
     }
 
-    button {
+    .confirmar-btn {
       width: 100%;
       margin-top: 18px;
-      padding: 15px 18px;
+      padding: 16px 20px;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
       font-size: 17px;
       font-weight: bold;
-      transition: transform 0.2s ease;
-    }
-
-    button:hover {
-      transform: scale(1.02);
-    }
-
-    .ok {
-      background: #ff4d6d;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #ff4d6d, #ff6a82);
       color: white;
+      box-shadow: 0 4px 16px rgba(255, 77, 109, 0.3);
+    }
+
+    .confirmar-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 77, 109, 0.4);
+    }
+
+    .confirmar-btn:active {
+      transform: translateY(0);
     }
 
     #vagas {
-      margin-top: 10px;
+      margin-top: 14px;
       text-align: center;
       font-size: 14px;
       opacity: 0.9;
+      font-weight: 500;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     #msg {
-      margin-top: 14px;
+      margin-top: 12px;
       text-align: center;
-      font-size: 15px;
-      min-height: 24px;
+      font-size: 14px;
+      min-height: 22px;
+      font-weight: 500;
     }
 
-    @media (max-width: 768px) {
+    /* === MOBILE: coluna única === */
+    @media (max-width: 700px) {
       body {
-        padding: 10px;
+        align-items: flex-start;
+        padding-top: 16px;
+        padding-bottom: 24px;
       }
 
       .box {
         width: 100%;
         max-width: 100%;
-        padding: 24px 18px;
+        padding: 24px 16px;
+        margin: 0 8px;
+        border-radius: 20px;
+      }
+
+      .columns {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 20px;
       }
 
       h1 {
-        font-size: 32px;
+        font-size: 30px;
       }
 
       .sub {
+        font-size: 14px;
+      }
+
+      input {
+        padding: 12px 14px;
         font-size: 15px;
+        margin-top: 10px;
       }
 
-      .info {
-        font-size: 16px;
+      .pagamento-select {
+        margin-top: 14px;
+        margin-bottom: 16px;
       }
 
-      input,
-      button {
-        font-size: 17px;
+      .pagamento-select label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .pagamento-dropdown select {
+        padding: 12px 14px;
+        font-size: 14px;
+        padding-right: 35px;
+        background-size: 14px;
+      }
+
+      .pix-section {
+        margin-top: 14px;
+      }
+
+      .pix-info {
+        gap: 6px;
+      }
+
+      .pix-email {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .copy-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .confirmar-btn {
+        padding: 14px 16px;
+        font-size: 15px;
       }
     }
   </style>
@@ -143,31 +401,66 @@
 
   <div class="box">
 
-    <h1>💖 Jantar de Casais</h1>
+    <h1>Jantar de Casais</h1>
+    <div class="sub">💍 <strong>Casamento: um laço que não se desfaz</strong></div>
     <div class="sub">IEQ Mendonça</div>
 
-    <div class="info">📅 <strong>13/06/2026</strong></div>
-    <div class="info">⏰ <strong>19:30</strong></div>
-    <div class="info">💍 <strong>Casamento: um laço que não se desfaz</strong></div>
-    <div class="info">📍 <strong>CCR de Mendonça</strong></div>
-    <div class="info">💰 <strong>R$150,00 o casal</strong></div>
-    <div class="info">👶 <strong>Crianças (5 a 10 anos): R$40,00</strong></div>
+    <div class="columns">
 
-    <input id="nome" placeholder="Nome do casal">
-    <input id="tel" placeholder="Telefone">
-    <input id="filhos" placeholder="Quantidade de filhos">
-    <input id="idades" placeholder="Idade dos filhos">
+      <!-- Coluna esquerda: informações -->
+      <div class="inner-card">
+        <div class="info-title">Informações Importantes</div>
 
-    <button type="button" class="ok" onclick="enviar()">Confirmar</button>
-    <p id="vagas" style="text-align:center; margin-top:10px;">
-      Carregando vagas...
-    </p>
-    <p id="msg"></p>
+        <div class="info">📅 <strong>13/06/2026</strong></div>
+        <div class="info">⏰ <strong>19:30</strong></div>
+        <div class="info">📍 <strong>CCR de Mendonça</strong></div>
+        <div class="info">💰 <strong>R$150,00 o casal</strong></div>
+        <div class="info">👶 <strong>Crianças (5 a 10 anos): R$40,00</strong></div>
+
+        <div class="info" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: none;">
+          ⏳ <strong>Pagamento até dia 05/06</strong>
+        </div>
+
+        <div class="pix-section" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div class="info" style="margin-bottom: 8px;">💳 <strong>Pagamento via Pix:</strong></div>
+          <div class="pix-info">
+            <div class="pix-email">michelefsfreitas@gmail.com</div>
+            <button class="copy-btn" onclick="copiarPix()">📋 Copiar Pix</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna direita: formulário -->
+      <div class="inner-card form-col">
+        <div class="info-title">Confirmar Presença</div>
+
+        <input id="nome" placeholder="Nome do casal">
+        <input id="tel" placeholder="Telefone">
+        <input id="filhos" placeholder="Quantidade de filhos">
+        <input id="idades" placeholder="Idade dos filhos">
+
+        <div class="pagamento-select">
+          <label>Selecione a forma de pagamento:</label>
+          <div class="pagamento-dropdown">
+            <select name="pagamento" required>
+              <option value="">Escolha uma opção</option>
+              <option value="Dinheiro">💵 Dinheiro</option>
+              <option value="Pix">📱 Pix</option>
+              <option value="Cartão">💳 Cartão (2x com taxa)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="confirmar-btn" type="button" onclick="enviar()">Confirmar</button>
+        <p id="vagas">Carregando vagas...</p>
+        <p id="msg"></p>
+      </div>
+
+    </div>
 
   </div>
 
   <script>
-
     async function atualizarVagas() {
       const supabase = getSupabaseClient();
       if (!supabase) return;
@@ -192,10 +485,7 @@
         document.getElementById("vagas").innerText = `💖 Restam ${restantes} vagas`;
       }
     }
-    const nomeInput = document.getElementById("nome");
-    const telInput = document.getElementById("tel");
-    const filhosInput = document.getElementById("filhos");
-    const idadesInput = document.getElementById("idades");
+
     const msg = document.getElementById("msg");
 
     function getSupabaseClient() {
@@ -203,7 +493,6 @@
         msg.innerText = "Supabase não carregado";
         return null;
       }
-
       return window.supabase.createClient(
         "https://qfoiyphfyjjzxgesynmt.supabase.co",
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmb2l5cGhmeWpqenhnZXN5bm10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4NDY1ODEsImV4cCI6MjA5MzQyMjU4MX0.--ZELH0chJiXeC6mHRxwhtIvkPm8cxNQZEnk6IRzjSs"
@@ -211,14 +500,14 @@
     }
 
     window.enviar = async function () {
-
       const supabase = getSupabaseClient();
       if (!supabase) return;
 
-      let nome = nomeInput.value;
-      let tel = telInput.value;
-      let filhos = filhosInput.value;
-      let idades = idadesInput.value;
+      let nome = document.getElementById("nome").value;
+      let tel = document.getElementById("tel").value;
+      let filhos = document.getElementById("filhos").value;
+      let idades = document.getElementById("idades").value;
+      let pagamento = document.querySelector('select[name="pagamento"]').value;
 
       const { count } = await supabase
         .from("inscricoes")
@@ -236,21 +525,47 @@
 
       const { error } = await supabase
         .from("inscricoes")
-        .insert([{ nome, telefone: tel, filhos, idades }]);
+        .insert([{ nome, telefone: tel, filhos, idades, pagamento }]);
 
       if (error) {
         msg.innerText = "Erro: " + error.message;
-        console.log(error);
       } else {
-        msg.innerText = "Inscrição salva!"; await atualizarVagas();
-        nomeInput.value = "";
-        telInput.value = "";
-        filhosInput.value = "";
-        idadesInput.value = "";
+        msg.innerText = "✅ Inscrição salva!";
+        await atualizarVagas();
+        document.getElementById("nome").value = "";
+        document.getElementById("tel").value = "";
+        document.getElementById("filhos").value = "";
+        document.getElementById("idades").value = "";
       }
     };
 
-    atualizarVagas();
+    function copiarPix() {
+      const pixEmail = "michelefsfreitas@gmail.com";
+      const copyBtn = document.getElementById("copyBtn");
+
+      navigator.clipboard.writeText(pixEmail).then(() => {
+        copyBtn.innerHTML = "✅ Copiado!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.innerHTML = "📋 Copiar Pix";
+          copyBtn.classList.remove("copied");
+        }, 2000);
+      }).catch(() => {
+        const textArea = document.createElement("textarea");
+        textArea.value = pixEmail;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        copyBtn.innerHTML = "✅ Copiado!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.innerHTML = "📋 Copiar Pix";
+          copyBtn.classList.remove("copied");
+        }, 2000);
+      });
+    }
+
   </script>
 
 </body>
