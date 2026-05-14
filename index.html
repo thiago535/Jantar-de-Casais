@@ -425,7 +425,7 @@
           <div class="info" style="margin-bottom: 8px;">💳 <strong>Pagamento via Pix:</strong></div>
           <div class="pix-info">
             <div class="pix-email">michelefsfreitas@gmail.com</div>
-            <button class="copy-btn" onclick="copiarPix()">📋 Copiar Pix</button>
+            <button id="copyBtn" class="copy-btn" onclick="copiarPix()">📋 Copiar Pix</button>
           </div>
         </div>
       </div>
@@ -565,6 +565,8 @@
         }, 2000);
       });
     }
+
+    window.addEventListener('DOMContentLoaded', atualizarVagas);
 
   </script>
 
