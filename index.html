@@ -435,28 +435,24 @@
         <div class="info-title">Confirmar Presença</div>
 
         <input id="nome" placeholder="Nome do casal">
-        <input id="tel" placeholder="Telefone">
-        <input id="filhos" placeholder="Quantidade de filhos">
-        <input id="idades" placeholder="Idade dos filhos">
-
-        <div class="pagamento-select">
-          <label>Selecione a forma de pagamento:</label>
-          <div class="pagamento-dropdown">
-            <select name="pagamento" required>
-              <option value="">Escolha uma opção</option>
-              <option value="Dinheiro">💵 Dinheiro</option>
-              <option value="Pix">📱 Pix</option>
-              <option value="Cartão">💳 Cartão (2x com taxa)</option>
-            </select>
-          </div>
+        <input id="tel" placeholder="Telefone (somente números)" inputmode="tel">
+        <label>Selecione a forma de pagamento:</label>
+        <div class="pagamento-dropdown">
+          <select name="pagamento" required>
+            <option value="">Escolha uma opção</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+            <option value="Pix">📱 Pix</option>
+            <option value="Cartão">💳 Cartão (2x com taxa)</option>
+          </select>
         </div>
-
-        <button class="confirmar-btn" type="button" onclick="enviar()">Confirmar</button>
-        <p id="vagas">Carregando vagas...</p>
-        <p id="msg"></p>
       </div>
 
+      <button class="confirmar-btn" type="button" onclick="enviar()">Confirmar</button>
+      <p id="vagas">Carregando vagas...</p>
+      <p id="msg"></p>
     </div>
+
+  </div>
 
   </div>
 
@@ -499,15 +495,26 @@
       );
     }
 
+    function validarTelefone(tel) {
+      const apenasNumeros = tel.replace(/\D/g, "");
+      return apenasNumeros.length >= 8 && apenasNumeros.length <= 11 && !/^0+$/.test(apenasNumeros);
+    }
+
     window.enviar = async function () {
       const supabase = getSupabaseClient();
       if (!supabase) return;
 
-      let nome = document.getElementById("nome").value;
-      let tel = document.getElementById("tel").value;
-      let filhos = document.getElementById("filhos").value;
-      let idades = document.getElementById("idades").value;
+      let nome = document.getElementById("nome").value.trim();
+      let tel = document.getElementById("tel").value.trim();
+      let filhos = document.getElementById("filhos").value.trim();
+      let idades = document.getElementById("idades").value.trim();
       let pagamento = document.querySelector('select[name="pagamento"]').value;
+      let telefoneFormatado = tel.replace(/\D/g, "");
+
+      if (!nome || !tel || !validarTelefone(tel)) {
+        alert("Preencha tudo e use um telefone válido (não somente zeros).");
+        return;
+      }
 
       const { count } = await supabase
         .from("inscricoes")
@@ -525,7 +532,7 @@
 
       const { error } = await supabase
         .from("inscricoes")
-        .insert([{ nome, telefone: tel, filhos, idades, pagamento }]);
+        .insert([{ nome, telefone: telefoneFormatado, filhos, idades, pagamento }]);
 
       if (error) {
         msg.innerText = "Erro: " + error.message;
